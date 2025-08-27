@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const playGame = () => {
+        let humanScore = 0;
+        let computerScore = 0;
+
+        const getComputerChoice = () => {
+          let cpuChoice = Math.floor(Math.random() * 3);
+          if (cpuChoice === 0) {
+            return "rock";
+          } else if (cpuChoice === 1) {
+            return "paper";
+          } else {
+            return "scissors";
+          }
+        };
+
+        const getHumanChoice = () => {
+          let yourChoice = prompt("Please enter your choice");
+          return yourChoice;
+        };
+
+        const playRound = (humanChoice, computerChoice) => {
+          let hC = humanChoice.toLowerCase();
+          let cC = computerChoice.toLowerCase();
+
+          if (hC === cC) {
+            return `It's a tie! Player: ${humanScore} - Computer: ${computerScore}`;
+          } else if (
+            (hC === "rock" && cC === "paper") ||
+            (hC === "paper" && cC === "rock") ||
+            (hC === "scissors" && cC === "paper")
+          ) {
+            humanScore++;
+            return `You win! ${hC} beats ${cC}! Player: ${humanScore} - Computer: ${computerScore}`;
+          } else {
+            computerScore++;
+            return `You lose! ${cC} beats ${hC}! Player: ${humanScore} - Computer: ${computerScore}`;
+          }
+        };
+        for (let i = 0; i < 5; i++) {
+          const humanSelection = getHumanChoice();
+          const computerSelection = getComputerChoice();
+          console.log(playRound(humanSelection, computerSelection));
+        }
+        if (humanScore > computerScore) {
+          return `🍾Congrats! You win!🎉 Player: ${humanScore} - Computer: ${computerScore}`;
+        } else if (humanScore < computerScore) {
+          return `😖 Sorry... You lose! Player: ${humanScore} - Computer: ${computerScore}`;
+        } else {
+          return `🫱🏻‍🫲🏽 It's a tie! Oh well! Player: ${humanScore} - Computer: ${computerScore}`;
+        }
+      };
+      console.log(playGame());
+    </script>
+  </body>
+</html>

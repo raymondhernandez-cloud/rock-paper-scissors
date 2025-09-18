@@ -6,59 +6,78 @@
     <title>Document</title>
   </head>
   <body>
+    <button id="rock">🪨</button>
+    <button id="paper">📃</button>
+    <button id="scissors">✂️</button>
+    <div id="resultsDiv"></div>
     <script>
-      const playGame = () => {
-        let humanScore = 0;
-        let computerScore = 0;
+      let humanScore = 0;
+      let computerScore = 0;
 
-        const getComputerChoice = () => {
-          let cpuChoice = Math.floor(Math.random() * 3);
-          if (cpuChoice === 0) {
-            return "rock";
-          } else if (cpuChoice === 1) {
-            return "paper";
-          } else {
-            return "scissors";
-          }
-        };
-
-        const getHumanChoice = () => {
-          let yourChoice = prompt("Please enter your choice");
-          return yourChoice;
-        };
-
-        const playRound = (humanChoice, computerChoice) => {
-          let hC = humanChoice.toLowerCase();
-          let cC = computerChoice.toLowerCase();
-
-          if (hC === cC) {
-            return `It's a tie! Player: ${humanScore} - Computer: ${computerScore}`;
-          } else if (
-            (hC === "rock" && cC === "paper") ||
-            (hC === "paper" && cC === "rock") ||
-            (hC === "scissors" && cC === "paper")
-          ) {
-            humanScore++;
-            return `You win! ${hC} beats ${cC}! Player: ${humanScore} - Computer: ${computerScore}`;
-          } else {
-            computerScore++;
-            return `You lose! ${cC} beats ${hC}! Player: ${humanScore} - Computer: ${computerScore}`;
-          }
-        };
-        for (let i = 0; i < 5; i++) {
-          const humanSelection = getHumanChoice();
-          const computerSelection = getComputerChoice();
-          console.log(playRound(humanSelection, computerSelection));
-        }
-        if (humanScore > computerScore) {
-          return `🍾Congrats! You win!🎉 Player: ${humanScore} - Computer: ${computerScore}`;
-        } else if (humanScore < computerScore) {
-          return `😖 Sorry... You lose! Player: ${humanScore} - Computer: ${computerScore}`;
+      //Copmuter's choice
+      const getComputerChoice = () => {
+        let cpuChoice = Math.floor(Math.random() * 3);
+        if (cpuChoice === 0) {
+          return "rock";
+        } else if (cpuChoice === 1) {
+          return "paper";
         } else {
-          return `🫱🏻‍🫲🏽 It's a tie! Oh well! Player: ${humanScore} - Computer: ${computerScore}`;
+          return "scissors";
         }
       };
-      console.log(playGame());
+
+      //Disable buttons after the game is over
+      const disableButtons = () => {
+        const disabledButtons = document.querySelectorAll("button");
+        disabledButtons.forEach((button) => {
+          button.disabled = true;
+        });
+      };
+
+      //Plays the game
+      const playRound = (humanChoice, computerChoice) => {
+        let hC = humanChoice.toLowerCase();
+        let cC = computerChoice.toLowerCase();
+        let message = "";
+
+        if (hC === cC) {
+          message = `🫱🏻‍🫲🏽 It's a tie! Player: ${humanScore} - Computer: ${computerScore}`;
+        } else if (
+          (hC === "rock" && cC === "scissors") ||
+          (hC === "paper" && cC === "rock") ||
+          (hC === "scissors" && cC === "paper")
+        ) {
+          humanScore++;
+          message = `🥇You win!🏆 ${hC} beats ${cC}! Player: ${humanScore} - Computer: ${computerScore}`;
+        } else {
+          computerScore++;
+          message = `💢You lose!😡 ${cC} beats ${hC}! Player: ${humanScore} - Computer: ${computerScore}`;
+        }
+
+        //End game after someone has 5 wins
+        if (humanScore === 5) {
+          message = `🍾Congrats! You won!🎉 Player: ${humanScore} - Computer: ${computerScore}`;
+          disableButtons();
+        }
+
+        if (computerScore === 5) {
+          message = `😖 Sorry... You lost!😒 Player: ${humanScore} - Computer: ${computerScore}`;
+          disableButtons();
+        }
+
+        const resultsDiv = document.getElementById("resultsDiv");
+        resultsDiv.textContent = message;
+      };
+
+      //Sets buttons to call playRound
+      const buttons = document.querySelectorAll("button");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const playerSelection = button.id;
+          const computerSelection = getComputerChoice();
+          playRound(playerSelection, computerSelection);
+        });
+      });
     </script>
   </body>
 </html>
